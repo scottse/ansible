@@ -1,0 +1,12 @@
+apt:
+  hosts:
+    vmsrv01:
+    vmsrv02:
+  vars:
+    ansible_ssh_common_args: "-o StrictHostKeyChecking=accept-new"
+dnf:
+  hosts:
+    vmsrv03:
+    vmsrv04:
+  vars:
+    ansible_ssh_common_args: "-o StrictHostKeyChecking=accept-new"

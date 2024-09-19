@@ -1,0 +1,9 @@
+- name: Adding users accounts
+  ansible.builtin.user:
+    name: "{{ item.username }}"
+    state: "{{ item.state }}"
+    shell: /bin/bash
+    create_home: true
+    groups: usergroup
+    append: true
+  loop: "{{ users }}"

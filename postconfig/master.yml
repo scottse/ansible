@@ -1,0 +1,48 @@
+---
+- name: Create users group
+  hosts: all
+  remote_user: test
+
+  tasks:
+   - name: Add usergroups
+     ansible.builtin.group:
+      name: usergroup
+      state: present
+
+- name: Add users to system
+  hosts: all
+  remote_user: test
+  roles:
+   - users
+
+- name: Update Deb-based systems with Apt
+  hosts: apt
+  remote_user: test
+
+  tasks:
+   - name: Update Apt Cache
+     ansible.builtin.apt:
+      update_cache: true
+
+   - name: Update all packages to latest version - Apt
+     ansible.builtin.apt:
+      name: "*"
+      state: latest # noqa package-latest
+
+- name: Update RPM-based systems with dnf
+  hosts: dnf
+  remote_user: test
+
+  tasks:
+   - name: Update all packages to latest version - Dnf
+     ansible.builtin.dnf:
+      name: "*"
+      state: latest # noqa package-latest
+
+- name: Reboot system
+  hosts: all
+  remote_user: test
+
+  tasks:
+   - name: Reboot system
+     ansible.builtin.reboot:

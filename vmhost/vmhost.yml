@@ -55,29 +55,6 @@
       - cloud-init-iso
       - cloud-images
       - iso
-  #  - name: Make cloud-images directory
-  #    ansible.builtin.file:
-  #     path: /vm/cloud-images
-  #     state: directory
-  #     mode: '0755'
-
-  #  - name: Make cloud-init directory
-  #    ansible.builtin.file:
-  #     path: /vm/cloud-init
-  #     state: directory
-  #     mode: '0755'
-
-  #  - name: Make cloud-init-iso directory
-  #    ansible.builtin.file:
-  #     path: /vm/cloud-init-iso
-  #     state: directory
-  #     mode: '0755'
-  #  - name: Make iso directory
-
-  #    ansible.builtin.file:
-  #     path: /vm/iso
-  #     state: directory
-  #     mode: '0755'
 
 # Copy config files to host and delete old config files for networking
 - name: Copy config files and configure networking

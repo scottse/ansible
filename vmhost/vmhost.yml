@@ -44,35 +44,40 @@
      register: output_cmd
      changed_when: output_cmd.rc != 0
 
-   - name: Make images directory
+   - name: Make VM pool directories
      ansible.builtin.file:
-      path: /vm/images
+      path: /vm/{{ item }}
       state: directory
       mode: '0755'
+     loop:
+      - images
+      - cloud-init
+      - cloud-init-iso
+      - cloud-images
+      - iso
+  #  - name: Make cloud-images directory
+  #    ansible.builtin.file:
+  #     path: /vm/cloud-images
+  #     state: directory
+  #     mode: '0755'
 
-   - name: Make cloud-images directory
-     ansible.builtin.file:
-      path: /vm/cloud-images
-      state: directory
-      mode: '0755'
+  #  - name: Make cloud-init directory
+  #    ansible.builtin.file:
+  #     path: /vm/cloud-init
+  #     state: directory
+  #     mode: '0755'
 
-   - name: Make cloud-init directory
-     ansible.builtin.file:
-      path: /vm/cloud-init
-      state: directory
-      mode: '0755'
+  #  - name: Make cloud-init-iso directory
+  #    ansible.builtin.file:
+  #     path: /vm/cloud-init-iso
+  #     state: directory
+  #     mode: '0755'
+  #  - name: Make iso directory
 
-   - name: Make cloud-init-iso directory
-     ansible.builtin.file:
-      path: /vm/cloud-init-iso
-      state: directory
-      mode: '0755'
-   - name: Make iso directory
-
-     ansible.builtin.file:
-      path: /vm/iso
-      state: directory
-      mode: '0755'
+  #    ansible.builtin.file:
+  #     path: /vm/iso
+  #     state: directory
+  #     mode: '0755'
 
 # Copy config files to host and delete old config files for networking
 - name: Copy config files and configure networking
@@ -102,7 +107,6 @@
      ansible.builtin.reboot:
 
 # Configure libvirt networking and storage pools
-
 - name: Configure libvirt networking and storage pools
   hosts: vmhost
   remote_user: test
@@ -129,71 +133,24 @@
      community.libvirt.virt_net:
       autostart: true
       name: br0
-  #  - name: Define images libvirt pool
-  #    community.libvirt.virt_pool:
-  #     command: define
-  #     name: images
-  #     xml: '{{ lookup("template", "files/images.xml") }}'
-  #  - name: Define cloud-init libvirt pool
-  #    community.libvirt.virt_pool:
-  #     command: define
-  #     name: cloud-init
-  #     xml: '{{ lookup("template", "files/cloud-init.xml") }}'
-  #  - name: Define cloud-images libvirt pool
-  #    community.libvirt.virt_pool:
-  #     command: define
-  #     name: cloud-images
-  #     xml: '{{ lookup("template", "files/cloud-images.xml") }}'
-  #  - name: Define cloud-init-iso libvirt pool
-  #    community.libvirt.virt_pool:
-  #     command: define
-  #     name: cloud-init-iso
-  #     xml: '{{ lookup("template", "files/cloud-init-iso.xml") }}'
-  #  - name: Define iso libvirt pool
-  #    community.libvirt.virt_pool:
-  #     command: define
-  #     name: iso
-  #     xml: '{{ lookup("template", "files/iso.xml") }}'
-  #  - name: Autostart images libvirt pool
-  #    community.libvirt.virt_pool:
-  #     autostart: true
-  #     name: images
-  #  - name: Autostart cloud-images libvirt pool
-  #    community.libvirt.virt_pool:
-  #     autostart: true
-  #     name: cloud-images
-  #  - name: Autostart cloud-init libvirt pool
-  #    community.libvirt.virt_pool:
-  #     autostart: true
-  #     name: cloud-init
-  #  - name: Autostart cloud-init-iso libvirt pool
-  #    community.libvirt.virt_pool:
-  #     autostart: true
-  #     name: cloud-init-iso
-  #  - name: Autostart iso libvirt pool
-  #    community.libvirt.virt_pool:
-  #     autostart: true
-  #     name: iso
    - name: Define VM pool directories
      community.libvirt.virt_pool:
       command: define
       name: "{{ item }}"
-      xml: '{{ lookup("template", "files/"\{{ item }}".xml") }}'
+      xml: '{{ lookup("template", "files/{{ item }}.xml") }}'
      loop:
       - images
       - cloud-init
       - cloud-init-iso
       - cloud-images
       - iso
-
-
-  #  - name: Autostart cloud-init libvirt pool
-  #    community.libvirt.virt_pool:
-  #     autostart: true
-  #     name: "{{  }}"
-  #    loop:
-  #     - images
-  #     - cloud-init
-  #     - cloud-init-iso
-  #     - cloud-images
-  #     - iso
+   - name: Autostart cloud-init libvirt pool
+     community.libvirt.virt_pool:
+      autostart: true
+      name: "{{ item }}"
+     loop:
+      - images
+      - cloud-init
+      - cloud-init-iso
+      - cloud-images
+      - iso

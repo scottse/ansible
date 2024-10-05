@@ -1,0 +1,6 @@
+<pool type="dir">
+  <name>cloud-init-iso</name>
+  <target>
+    <path>/vm/cloud-init-iso</path>
+  </target>
+</pool>

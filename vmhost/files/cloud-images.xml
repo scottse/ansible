@@ -1,0 +1,6 @@
+<pool type="dir">
+  <name>cloud-images</name>
+  <target>
+    <path>/vm/cloud-images</path>
+  </target>
+</pool>

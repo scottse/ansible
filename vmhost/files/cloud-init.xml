@@ -1,0 +1,6 @@
+<pool type="dir">
+  <name>cloud-init</name>
+  <target>
+    <path>/vm/cloud-init</path>
+  </target>
+</pool>

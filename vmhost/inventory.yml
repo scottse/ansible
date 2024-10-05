@@ -1,0 +1,5 @@
+vmhost:
+  hosts:
+    vmh01:
+  vars:
+    ansible_ssh_common_args: "-o StrictHostKeyChecking=accept-new"

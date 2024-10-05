@@ -1,0 +1,7 @@
+<network connections='1'>
+  <name>br0</name>
+  <uuid>642c51c7-bf68-40ac-914f-1f05857afd41</uuid>
+  <forward mode='bridge'/>
+  <bridge name='br0'/>
+</network>
+

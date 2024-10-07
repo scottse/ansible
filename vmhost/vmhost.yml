@@ -133,7 +133,7 @@
       autostart: true
       name: br0
 
-   - name: Define VM pool directories
+   - name: Define VM pool
      community.libvirt.virt_pool:
       command: define
       name: "{{ item }}"

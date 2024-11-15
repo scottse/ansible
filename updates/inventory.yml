@@ -1,0 +1,49 @@
+infra:
+  hosts:
+    infra01:
+    infra02:
+  vars:
+    ansible_ssh_common_args: "-o StrictHostKeyChecking=accept-new"
+    ansible_user: test
+    ansible_become: true
+kube:
+  hosts:
+    kube01:
+    kube02:
+    kube03:
+    kube04:
+  vars:
+    ansible_ssh_common_args: "-o StrictHostKeyChecking=accept-new"
+    ansible_user: test
+    ansible_become: true
+apt:
+  hosts:
+    vmsrv01:
+    vmsrv02:
+  vars:
+    ansible_ssh_common_args: "-o StrictHostKeyChecking=accept-new"
+    ansible_user: test
+    ansible_become: true
+dnf:
+  hosts:
+    vmsrv03:
+    vmsrv04:
+  vars:
+    ansible_ssh_common_args: "-o StrictHostKeyChecking=accept-new"
+    ansible_user: test
+    ansible_become: true
+pi:
+  hosts:
+    rp01:
+      ansible_host: 192.168.3.100
+    rp02:
+      ansible_host: 192.168.3.101
+    rp03:
+      ansible_host: 192.168.3.102
+    rp04:
+      ansible_host: 192.168.3.103
+  vars:
+    ansible_ssh_common_args: "-o StrictHostKeyChecking=accept-new"
+    ansible_user: pi
+    ansible_become: true
+  #  ansible_ssh_private_key_file: "/home/"

@@ -1,0 +1,63 @@
+---
+# Update hosts that use the apt package manager.
+- name: Update hosts using the apt package manager
+  hosts: apt
+  tags: apt
+
+  tasks:
+   - name: Update Apt Cache
+     ansible.builtin.apt:
+      update_cache: true
+
+   - name: Update all packages to latest version from Apt
+     ansible.builtin.apt:
+      name: "*"
+      state: latest # noqa package-latest
+
+# Update hosts that use the dnf package manager.
+- name: Update hosts using the dnf package manager
+  hosts: dnf
+  tags: dnf
+
+  tasks:
+   - name: Update all packages to latest version from dnf
+     ansible.builtin.dnf:
+      name: "*"
+      state: latest # noqa package-latest
+
+# Update infra hosts that use the apt package manager.
+- name: Update hosts using the apt package manager
+  hosts: infra
+  tags: infra
+
+  tasks:
+   - name: Update Apt Cache
+     ansible.builtin.apt:
+      update_cache: true
+
+   - name: Update all packages to latest version from Apt
+     ansible.builtin.apt:
+      name: "*"
+      state: latest # noqa package-latest
+
+# Update infra hosts that use the apt package manager.
+- name: Update Raspberry Pi hosts using the apt package manager
+  hosts: pi
+  tags: pi
+
+  tasks:
+   - name: Update Apt Cache
+     ansible.builtin.apt:
+      update_cache: true
+
+   - name: Update all packages to latest version from Apt
+     ansible.builtin.apt:
+      name: "*"
+      state: latest # noqa package-latest
+# - name: Reboot
+#   hosts: apt,dnf
+#   tags: reboot
+
+#   tasks:
+#    - name: Reboot system after updates
+#      ansible.builtin.reboot:

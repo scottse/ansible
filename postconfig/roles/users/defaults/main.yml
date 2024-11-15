@@ -1,0 +1,9 @@
+users:
+  - username: user1
+    state: present
+
+  - username: user2
+    state: present
+
+  - username: user3
+    state: present

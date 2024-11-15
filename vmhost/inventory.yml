@@ -1,0 +1,7 @@
+vmhost:
+  hosts:
+    vmh01:
+  vars:
+    ansible_ssh_common_args: "-o StrictHostKeyChecking=accept-new"
+    ansible_user: test
+    ansible_become: true

@@ -1,0 +1,156 @@
+---
+# Update apt cache, upgrade packages and install libvirt/kvm
+- name: Update Apt cache and upgrade packages
+  hosts: vmhost
+
+  tasks:
+   - name: Update Apt cache
+     ansible.builtin.apt:
+      update_cache: true
+
+   - name: Upgrade packages with Apt
+     ansible.builtin.apt:
+      name: "*"
+      state: latest # noqa package-latest
+
+- name: Install required software packages
+  hosts: vmhost
+
+  tasks:
+   - name: Installing required software packages
+     ansible.builtin.apt:
+      pkg:
+       - qemu-kvm
+       - libvirt-daemon-system
+       - libvirt-clients
+       - bridge-utils
+       - cloud-image-utils
+       - virtinst
+       - zfsutils-linux
+       - python3-libvirt
+       - python3-lxml
+      state: present
+
+# Configure disk for VM storage
+- name: Configure disks for VM storage using ZFS and make VM directories
+  hosts: vmhost
+
+  tasks:
+   - name: Create zpool for VM storage
+     ansible.builtin.command: zpool create vm raidz1 /dev/sdb /dev/sdc /dev/sdd
+     register: output_cmd
+     changed_when: output_cmd.rc != 0
+
+   - name: Make VM pool directories
+     ansible.builtin.file:
+      path: /vm/{{ item }}
+      state: directory
+      mode: '0755'
+     loop:
+      - images
+      - cloud-init
+      - cloud-init-iso
+      - cloud-images
+      - iso
+
+# Copy config files to host and delete old config files for networking
+- name: Copy config files and configure networking
+  hosts: vmhost
+
+  tasks:
+   - name: Clone myvm repo
+     ansible.builtin.git:
+      repo: https://github.com/scottse/myvm.git
+      dest: /tmp/src
+      version: "HEAD" # noqa: latest
+
+   - name: Copy myvm to /usr/local/bin
+     ansible.builtin.copy:
+      remote_src: true
+      src: /tmp/src/myvm
+      dest: /usr/local/bin
+      owner: root
+      group: root
+      mode: '0755'
+
+   - name: Delete 50-cloud-init.yaml
+     ansible.builtin.file:
+      path: /etc/netplan/50-cloud-init.yaml
+      state: absent
+
+   - name: Copy 99-disable-network-config.cfg to host
+     ansible.builtin.copy:
+      src: /home/test/projects/ansible/vmhost/files/99-disable-network-config.cfg
+      dest: /etc/cloud/cloud.cfg.d/
+      owner: root
+      group: root
+      mode: '0644'
+
+   - name: Copy 10-br0-config.yaml to host
+     ansible.builtin.copy:
+      src: /home/test/projects/ansible/vmhost/files/10-br0-config.yaml
+      dest: /etc/netplan/
+      owner: root
+      group: root
+      mode: '0600'
+
+   - name: Reboot system
+     ansible.builtin.reboot:
+
+# Configure libvirt networking and storage pools
+- name: Configure libvirt networking and storage pools
+  hosts: vmhost
+
+  tasks:
+   - name: Stop default VM network - Delete
+     community.libvirt.virt_net:
+      command: destroy
+      name: default
+
+   - name: Undefine default VM network - Delete
+     community.libvirt.virt_net:
+      command: undefine
+      name: default
+
+   - name: Create br0 VM network - Create
+     community.libvirt.virt_net:
+      command: define
+      name: br0
+      xml: '{{ lookup("template", "files/br0.xml") }}'
+
+   - name: Start br0 VM network
+     community.libvirt.virt_net:
+      state: active
+      name: br0
+
+   - name: Autostart br0 VM network
+     community.libvirt.virt_net:
+      autostart: true
+      name: br0
+
+   - name: Define VM pool
+     community.libvirt.virt_pool:
+      command: define
+      name: "{{ item }}"
+      xml: '{{ lookup("template", "files/{{ item }}.xml") }}'
+     loop:
+      - images
+      - cloud-init
+      - cloud-init-iso
+      - cloud-images
+      - iso
+
+   - name: Autostart cloud-init libvirt pool
+     community.libvirt.virt_pool:
+      autostart: true
+      name: "{{ item }}"
+
+     loop:
+      - images
+      - cloud-init
+      - cloud-init-iso
+      - cloud-images
+      - iso
+
+   - name: Reboot system
+     ansible.builtin.reboot:

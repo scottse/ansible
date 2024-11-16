@@ -1,4 +1,6 @@
 ---
+# Playbook for doing patching using AWX.
+
 # Update hosts that use the apt package manager.
 - name: Update hosts using the apt package manager
   hosts: all

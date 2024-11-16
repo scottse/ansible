@@ -1,0 +1,7 @@
+---
+# Playbook to test hosts with Ansible
+- name: Use ping module
+  
+  tasks:
+   - name: testing host on AWX.
+     ansible.builtin.ping:

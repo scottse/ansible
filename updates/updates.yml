@@ -16,6 +16,7 @@
 
 # Update hosts that use the dnf package manager.
 - name: Update hosts using the dnf package manager
+  hosts: all
   tags: dnf
 
   tasks:
@@ -26,6 +27,7 @@
 
 # Update infra hosts that use the apt package manager.
 - name: Update hosts using the apt package manager
+  hosts: all
   tags: infra
 
   tasks:
@@ -40,6 +42,7 @@
 
 # Update infra hosts that use the apt package manager.
 - name: Update Raspberry Pi hosts using the apt package manager
+  hosts: all
   tags: pi
 
   tasks:
@@ -51,10 +54,10 @@
      ansible.builtin.apt:
       name: "*"
       state: latest # noqa package-latest
-# - name: Reboot
-#   hosts: apt,dnf
-#   tags: reboot
-
-#   tasks:
-#    - name: Reboot system after updates
-#      ansible.builtin.reboot:
+- name: Reboot
+  hosts: all
+  tags: reboot
+  
+  tasks:
+   - name: Reboot system after updates
+     ansible.builtin.reboot:

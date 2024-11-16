@@ -1,6 +1,7 @@
 ---
 # Update hosts that use the apt package manager.
 - name: Update hosts using the apt package manager
+  hosts: apt
   tags: apt
 
   tasks:

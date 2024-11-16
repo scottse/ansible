@@ -1,7 +1,6 @@
 ---
 # Update hosts that use the apt package manager.
 - name: Update hosts using the apt package manager
-  hosts: apt
   tags: apt
 
   tasks:
@@ -16,7 +15,6 @@
 
 # Update hosts that use the dnf package manager.
 - name: Update hosts using the dnf package manager
-  hosts: dnf
   tags: dnf
 
   tasks:
@@ -27,7 +25,6 @@
 
 # Update infra hosts that use the apt package manager.
 - name: Update hosts using the apt package manager
-  hosts: infra
   tags: infra
 
   tasks:
@@ -42,7 +39,6 @@
 
 # Update infra hosts that use the apt package manager.
 - name: Update Raspberry Pi hosts using the apt package manager
-  hosts: pi
   tags: pi
 
   tasks:

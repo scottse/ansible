@@ -59,7 +59,7 @@
 - name: Reboot
   hosts: all
   tags: reboot
-  
+
   tasks:
    - name: Reboot system after updates
      ansible.builtin.reboot:

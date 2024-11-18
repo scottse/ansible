@@ -11,7 +11,7 @@
      ansible.builtin.apt:
       update_cache: true
 
-   - name: Update all packages to latest version from Apt
+   - name: Upgrading all packages with apt
      ansible.builtin.apt:
       name: "*"
       state: latest # noqa package-latest
@@ -28,7 +28,7 @@
       state: latest # noqa package-latest
 
 # Update infra hosts that use the apt package manager.
-- name: Update hosts using the apt package manager
+- name: Update infra servers using apt
   hosts: all
   tags: infra
 
@@ -37,13 +37,13 @@
      ansible.builtin.apt:
       update_cache: true
 
-   - name: Update all packages to latest version from Apt
+   - name: Upgrading all packages with apt
      ansible.builtin.apt:
       name: "*"
       state: latest # noqa package-latest
 
 # Update infra hosts that use the apt package manager.
-- name: Update Raspberry Pi hosts using the apt package manager
+- name: Update Raspberry Pis with apt
   hosts: all
   tags: pi
 
@@ -52,7 +52,7 @@
      ansible.builtin.apt:
       update_cache: true
 
-   - name: Update all packages to latest version from Apt
+   - name: Upgrading all packages with apt
      ansible.builtin.apt:
       name: "*"
       state: latest # noqa package-latest
